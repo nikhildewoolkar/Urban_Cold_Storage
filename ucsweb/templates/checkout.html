@@ -1,0 +1,905 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Urban Cold Storage</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+<link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+<link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+<link rel="stylesheet" href="{% static 'css/gijgo.css' %}">
+<link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/slick.css' %}">
+<link rel="stylesheet" href="{% static 'css/slicknav.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{%static 'styles.css' %}">
+</head>
+<body>
+<header>
+<div class="header-area ">
+<div id="sticky-header" class="main-header-area">
+<div class="container-fluid p-0">
+<div class="row align-items-center no-gutters">
+<div class="col-xl-2 col-lg-2">
+</div>
+<div class="col-xl-8 col-lg-8">
+<div class="main-menu  d-none d-lg-block text-center">
+<nav>
+<ul id="navigation">
+<li><a class="active" href="/home/">home</a></li>
+<li><a href="/about/">About Us</a></li>
+{% if user.is_authenticated %}
+				<li><a href="/profile/">Profile</a></li>
+{% else %}
+<li><a href="/signuplogin/">Signup/Login <i class="ti-angle-down"></i></a>
+<ul class="submenu">
+<li><a href="/signup/">Signup</a></li>
+<li><a href="/login/">Login</a></li>
+</ul>
+</li>
+{% endif %}
+<li><a href="/store/">Store</a></li>
+<li><a href="/advertisement/">Advertisement</a></li>
+<li><a href="/contact/">Contact</a></li>
+{% if user.is_authenticated %}
+<li><a href="/cart/">Cart</a></li>
+				<li><a href="/logout/">Logout</a></li>
+{% endif %}
+</ul>
+</nav>
+</div>
+</div>
+<div class="col-lg-2 d-none d-lg-block">
+<div class="log_chat_area d-flex align-items-end">
+{% comment %} <a href="/logout/" target="_black" class="say_hi">Say Hello</a> {% endcomment %}
+</div>
+</div>
+<div class="col-12">
+<div class="mobile_menu d-block d-lg-none"></div>
+</div>
+</div>
+ </div>
+</div>
+</div>
+</header>
+<div class="bradcam_area breadcam_bg_3">
+<div class="container">
+<div class="row">
+<div class="col-xl-12">
+<div class="bradcam_text">
+<h4 style="color:black;font-size:50px"><i>Welcome to UCS</i></h4>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+{% if user.is_authenticated and user.userprofile.utype == "admin" %}
+<h1>first,Logout from Admin User Account </h1>
+{% comment %} {% if user.is_authenticated and user.userprofile.utype == "normal" %}
+<h1>first,Logout from Admin User Account </h1> {% endcomment %}
+{% else %}
+<form action="/checkout/" method="POST" style="border:1px solid #ccc">
+    {% csrf_token %}
+    <div class="contain">
+	<center><h1>Payemnt Portal<h1><center>
+  <div class="form-control">
+    <br>
+    <hr>
+    	<label for="id">Select Payment Option:</label>
+<select id="id" name="id">
+  <option value="0">------------</option>
+  <option value="1">Cash On delievry</option>
+  <option value="2">Debit Card</option>
+  <option value="3">Credit Card</option>
+</select>
+<br>
+<hr>
+<div class="clearfix">
+      <button type="reset" class="cancelbtn" id="">Reset</button>
+      <button type="submit" class="signupbtn">Save</button>
+    </div>
+</form>
+<hr>
+{% if g == 0 %}
+<hr><hr>
+<center><h1>Please Select Appropriate Payment method...</h1></center>
+<hr><hr>
+{% endif %}
+{% if g == 1 %}
+<hr><hr>
+<center><h1>Verify Following Details For Cash On Delivery...</h1></center>
+<hr><hr>
+<center><h1>{{msg}}<h2></center>
+<hr>
+<form action="/order/" method="POST" style="border:1px solid #ccc">
+    {% csrf_token %}
+    <div class="contain">
+	<center><h1>Edit Profile<h1><center>
+    <p>Please fill in this form to edit an account.</p>
+	<hr>
+  <h6>If you want to change Email,PAN card no. and Adhar card no. then send request from Query Section and send email on official mail id from your registered email for verification.</h6>
+	<div class="form-control">
+    </br></br>
+  <label for="fname">User First Name:-</label>
+    <input type="text"  name="fname" value="{{user.first_name}}" required readonly>
+
+	<label for="lname">User Last Name:-</label>
+    <input type="text"  name="lname" value="{{user.last_name}}" required readonly>
+
+    <label for="uid">User UserName:-</label>
+    <input type="text" name="username" value="{{user.username}}" required readonly> 
+	
+	<label for="email">User Official Email:-</label>
+  <input type="email" name="email" value="{{user.email}}" required readonly>
+
+    <label for="phone">User Phone No.:-</label>
+    <input type="tel" id="phone" name="phone" value="{{user.userprofile.phoneno}}" required pattern="[0-9]{10}" readonly>   
+	
+	<label for="address">User Address:-</label>
+    <input type="text" id="add" name="add" value="{{user.userprofile.address}}" required readonly>
+
+<br/>
+{% for message in messages %}
+	<h6>{{message}}</h6>
+	{% endfor %}
+
+<div class="clearfix">
+      <button type="reset" class="cancelbtn" id="">Reset</button>
+      <button type="submit" class="signupbtn">Place Order</button>
+    </div>
+</form>
+
+<hr>
+
+{% endif %}
+{% if g == 2 %}
+<hr><hr>
+<center><h1>Debit Card Feature is not Active.Try Cash On Delivery</h1></center>
+<hr><hr>
+<div class="clearfix"> </div>
+								</ul>	
+							</div>	
+						</nav>		
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+		</div>
+		<!-- //banner -->
+	</div>
+
+    <form method="post" action="/checkout/"  id="form1">
+
+
+
+    <div>
+        
+    <center>
+				<h2 style="font-family:&#39;Times New Roman&#39;;color:maroon">Payment Form </h2>
+    </center>                
+    <br>
+    <center>
+        <table>
+            
+            <tbody><tr>
+                <td style="width: 345px">
+                    <h3 style="font-family:&#39;Times New Roman&#39;;color:maroon">Personal Details </h3>
+<table style="width:89%; background-color:chocolate;border: medium dashed #CC3300;" class="nav-justified">
+            
+    
+        <tbody><tr>
+            <td class="style8">
+            </td>
+            <td class="style1">
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="style8">
+                Name:</td>
+            <td class="style1">
+                <span id="ContentPlaceHolder1_lblName" class="form-control">{{h.username}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style8">
+                Address:</td>
+            <td>
+                <span id="ContentPlaceHolder1_lblAddrs" class="form-control">{{h.address}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style8">
+                Mobile:</td>
+            <td>
+                <span id="ContentPlaceHolder1_lblMob" class="form-control">{{h.phoneno}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        
+        <tr>
+            <td class="style9">
+                Total Amount</td>
+            <td class="style10">
+                <span id="ContentPlaceHolder1_lblAmt" class="form-control">{{total}}</span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        
+        <tr>
+            <td class="style8">
+                Payment Method:</td>
+            <td>
+                <select name="ctl00$ContentPlaceHolder1$ddlmodeofpayment" id="ContentPlaceHolder1_ddlmodeofpayment" class="form-control">
+	<option selected="selected" value="--Select--">--Select--</option>
+	<option value="1">Cash on Delivery</option>
+	<option value="2">Credit card</option>
+	<option value="3">Debit card</option>
+
+</select>
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                <br>
+                <input type="submit"  value="Proceed"  class="form-control">
+            </td>
+        </tr>
+    </tbody></table>
+                    </td>
+        <td>
+        
+        
+
+            
+    <div id="ContentPlaceHolder1_pnlPay" style="border-color:White;border-width:2px;border-style:Ridge;">
+	
+    
+    <div class="main">
+  <div class="content">
+    <div class="container_12">
+      <table class="style2">
+            <tbody><tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4" style="font-family: Algerian; font-size: xx-large; color: white">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: medium">"Credit Card / Debit Card Info</span></td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style5">
+                </td>
+                <td class="style6">
+                </td>
+                <td class="style7">
+                </td>
+            </tr>
+            <tr>
+                <td class="style5">
+                    &nbsp;</td>
+                <td class="style6">
+                    &nbsp;</td>
+                <td class="style7">
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;of the Card Holder</td>
+                <td class="style4">
+                    <input name="ctl00$ContentPlaceHolder1$txtName" type="text" id="ContentPlaceHolder1_txtName" class="Form-control" style="width:200px;">
+                    <span id="ContentPlaceHolder1_RequiredFieldValidator1" style="visibility:hidden;">Enter Name</span>
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Card Number(16 Digits)&nbsp;</td>
+                <td class="style4">
+                    
+                                                     <input name="ctl00$ContentPlaceHolder1$txtCard" type="text" id="ContentPlaceHolder1_txtCard" class="form-control">
+                                            
+                                            <span id="ContentPlaceHolder1_RequiredFieldValidator5" style="visibility:hidden;">Please Enter Card Number</span>
+                                            <span id="ContentPlaceHolder1_RegularExpressionValidator5" style="visibility:hidden;">Please enter in correct format</span>
+                   
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Expiry Date(MM/YY)</td>
+                <td class="style4">
+                    	                                            MM :<select name="ctl00$ContentPlaceHolder1$ddlmonths" id="ContentPlaceHolder1_ddlmonths">
+		<option selected="selected" value="-1">Month</option>
+		<option value="1">01</option>
+		<option value="2">02</option>
+		<option value="3">03</option>
+		<option value="4">04</option>
+		<option value="5">05</option>
+		<option value="6">06</option>
+		<option value="7">07</option>
+		<option value="8">08</option>
+		<option value="9">09</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+
+	</select>  <span id="ContentPlaceHolder1_RequiredFieldValidator6" class="form-control" style="display:inline-block;height:16px;width:96px;visibility:hidden;"></span>
+																               YY :<select name="ctl00$ContentPlaceHolder1$ddlyear" id="ContentPlaceHolder1_ddlyear">
+		<option selected="selected" value="-1">Year</option>
+		<option value="2020">2020</option>
+		<option value="2021">2021</option>
+		<option value="2022">2022</option>
+		<option value="2023">2023</option>
+		<option value="2024">2024</option>
+		<option value="2025">2025</option>
+		<option value="2026">2026</option>
+
+	</select>
+                                                        <span id="ContentPlaceHolder1_RequiredFieldValidator7" style="visibility:hidden;"></span>
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CVV&nbsp; Code&nbsp;</td>
+                <td class="style4">
+                        <input name="ctl00$ContentPlaceHolder1$txtCvv" type="text" maxlength="4" id="ContentPlaceHolder1_txtCvv" size="3" class="form-control" required="" style="height:25px;width:93px;">
+                                                            <span id="ContentPlaceHolder1_RegularExpressionValidator6" style="visibility:hidden;">Contains Only Digits</span>
+	
+	
+                    
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+
+
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    <input type="submit" name="ctl00$ContentPlaceHolder1$Button1" value="Pay" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$Button1&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="ContentPlaceHolder1_Button1" class="form-control" style="height:30px;width:80px;background-color:maroon;color:white">
+                    <span id="ContentPlaceHolder1_Label4" class="form-control">Label</span>
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+        </tbody></table>
+
+</div>
+    </div>
+
+    </div>
+    
+</div>
+    
+
+
+            </td>
+</tr>
+    </tbody></table>
+        </center>
+    
+
+    </div>
+    
+
+
+</form>
+
+{% endif %}
+{% if g == 3 %}
+<hr><hr>
+<center><h1>Credit Card Feature is not Active.Try Cash On Delivery</h1></center>
+<hr><hr>
+<div class="clearfix"> </div>
+								</ul>	
+							</div>	
+						</nav>		
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+		</div>
+		<!-- //banner -->
+	</div>
+
+    <form method="post" action="/checkout/"  id="form1">
+
+
+
+    <div>
+        
+    <center>
+				<h2 style="font-family:&#39;Times New Roman&#39;;color:maroon">Payment Form </h2>
+    </center>                
+    <br>
+    <center>
+        <table>
+            
+            <tbody><tr>
+                <td style="width: 345px">
+                    <h3 style="font-family:&#39;Times New Roman&#39;;color:maroon">Personal Details </h3>
+<table style="width:89%; background-color:chocolate;border: medium dashed #CC3300;" class="nav-justified">
+            
+    
+        <tbody><tr>
+            <td class="style8">
+            </td>
+            <td class="style1">
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="style8">
+                Name:</td>
+            <td class="style1">
+                <span id="ContentPlaceHolder1_lblName" class="form-control">{{h.username}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style8">
+                Address:</td>
+            <td>
+                <span id="ContentPlaceHolder1_lblAddrs" class="form-control">{{h.address}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        <tr>
+            <td class="style8">
+                Mobile:</td>
+            <td>
+                <span id="ContentPlaceHolder1_lblMob" class="form-control">{{h.phoneno}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        
+        <tr>
+            <td class="style9">
+                Total Amount</td>
+            <td class="style10">
+                <span id="ContentPlaceHolder1_lblAmt" class="form-control">{{total}}</span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                &nbsp;</td>
+        </tr>
+        
+        <tr>
+            <td class="style8">
+                Payment Method:</td>
+            <td>
+                <select name="ctl00$ContentPlaceHolder1$ddlmodeofpayment" id="ContentPlaceHolder1_ddlmodeofpayment" class="form-control">
+	<option selected="selected" value="--Select--">--Select--</option>
+	<option value="1">Cash on Delivery</option>
+	<option value="2">Credit card</option>
+	<option value="3">Debit card</option>
+
+</select>
+            </td>
+        </tr>
+        
+        <tr>
+            <td class="style8">
+                &nbsp;</td>
+            <td>
+                <br>
+                <input type="submit"  value="Proceed"  class="form-control">
+            </td>
+        </tr>
+    </tbody></table>
+                    </td>
+        <td>
+        
+        
+
+            
+    <div id="ContentPlaceHolder1_pnlPay" style="border-color:White;border-width:2px;border-style:Ridge;">
+	
+    
+    <div class="main">
+  <div class="content">
+    <div class="container_12">
+      <table class="style2">
+            <tbody><tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4" style="font-family: Algerian; font-size: xx-large; color: white">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: medium">"Credit Card / Debit Card Info</span></td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style5">
+                </td>
+                <td class="style6">
+                </td>
+                <td class="style7">
+                </td>
+            </tr>
+            <tr>
+                <td class="style5">
+                    &nbsp;</td>
+                <td class="style6">
+                    &nbsp;</td>
+                <td class="style7">
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name&nbsp;of the Card Holder</td>
+                <td class="style4">
+                    <input name="ctl00$ContentPlaceHolder1$txtName" type="text" id="ContentPlaceHolder1_txtName" class="Form-control" style="width:200px;">
+                    <span id="ContentPlaceHolder1_RequiredFieldValidator1" style="visibility:hidden;">Enter Name</span>
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Card Number(16 Digits)&nbsp;</td>
+                <td class="style4">
+                    
+                                                     <input name="ctl00$ContentPlaceHolder1$txtCard" type="text" id="ContentPlaceHolder1_txtCard" class="form-control">
+                                            
+                                            <span id="ContentPlaceHolder1_RequiredFieldValidator5" style="visibility:hidden;">Please Enter Card Number</span>
+                                            <span id="ContentPlaceHolder1_RegularExpressionValidator5" style="visibility:hidden;">Please enter in correct format</span>
+                   
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Expiry Date(MM/YY)</td>
+                <td class="style4">
+                    	                                            MM :<select name="ctl00$ContentPlaceHolder1$ddlmonths" id="ContentPlaceHolder1_ddlmonths">
+		<option selected="selected" value="-1">Month</option>
+		<option value="1">01</option>
+		<option value="2">02</option>
+		<option value="3">03</option>
+		<option value="4">04</option>
+		<option value="5">05</option>
+		<option value="6">06</option>
+		<option value="7">07</option>
+		<option value="8">08</option>
+		<option value="9">09</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+
+	</select>  <span id="ContentPlaceHolder1_RequiredFieldValidator6" class="form-control" style="display:inline-block;height:16px;width:96px;visibility:hidden;"></span>
+																               YY :<select name="ctl00$ContentPlaceHolder1$ddlyear" id="ContentPlaceHolder1_ddlyear">
+		<option selected="selected" value="-1">Year</option>
+		<option value="2020">2020</option>
+		<option value="2021">2021</option>
+		<option value="2022">2022</option>
+		<option value="2023">2023</option>
+		<option value="2024">2024</option>
+		<option value="2025">2025</option>
+		<option value="2026">2026</option>
+
+	</select>
+                                                        <span id="ContentPlaceHolder1_RequiredFieldValidator7" style="visibility:hidden;"></span>
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3" style="font-family: &#39;Baskerville Old Face&#39;; font-size: medium;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CVV&nbsp; Code&nbsp;</td>
+                <td class="style4">
+                        <input name="ctl00$ContentPlaceHolder1$txtCvv" type="text" maxlength="4" id="ContentPlaceHolder1_txtCvv" size="3" class="form-control" required="" style="height:25px;width:93px;">
+                                                            <span id="ContentPlaceHolder1_RegularExpressionValidator6" style="visibility:hidden;">Contains Only Digits</span>
+	
+	
+                    
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+
+
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    <input type="submit" name="ctl00$ContentPlaceHolder1$Button1" value="Pay" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$Button1&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="ContentPlaceHolder1_Button1" class="form-control" style="height:30px;width:80px;background-color:maroon;color:white">
+                    <span id="ContentPlaceHolder1_Label4" class="form-control">Label</span>
+                </td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td class="style3">
+                    &nbsp;</td>
+                <td class="style4">
+                    &nbsp;</td>
+                <td>
+                    &nbsp;</td>
+            </tr>
+        </tbody></table>
+
+</div>
+    </div>
+
+    </div>
+    
+</div>
+    
+
+
+            </td>
+</tr>
+    </tbody></table>
+        </center>
+    
+
+    </div>
+    
+
+
+</form>
+
+{% endif %}
+{% endif %}
+<footer class="footer">
+<div class="footer_top">
+<div class="container">
+<div class="row align-items-center">
+<div class="col-lg-2 col-md-3">
+<div class="footer_logo wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
+</div>
+</div>
+<div class="col-xl-7 col-lg-7 col-md-9">
+<div class="menu_links">
+<ul>
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay=".2s" href="/home/">| home |</a class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"></li>
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay=".4s" href="/about/">| About Us |</a></li>
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay=".6s" href="/store/">| Store |</a></li>
+{% if user.is_authenticated and user.userprofile.utype == "admin" %}
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay="1.1s" href="/profile/">| Profile |</a></li>
+{% else %}
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay=".8s" href="/signup/">| Signup |</a></li>
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay="1s" href="/login/">| Login |</a></li>
+{% endif %}
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay="1.1s" href="/advertisement/">| Advertisement |</a></li>
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay="1.1s" href="/contact/">| Contact |</a></li>
+{% if user.is_authenticated%}
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay="1.1s" href="/cart/">| Cart |</a></li>
+<li><a class="wow fadeInDown" data-wow-duration="1s" data-wow-delay="1.1s" href="/logout/">| Logout |</a></li>
+{% endif %}
+</ul>
+</div>
+</div>
+<div class="col-lg-3 col-md-12">
+<div class="socail_links">
+<ul>
+<li><a class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s" href="https://www.facebook.com/"> <i class="fa fa-facebook"></i> </a></li>
+<li><a class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s" href="https://www.twitter.com/"> <i class="fa fa-twitter"></i> </a></li>
+<li><a class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s" href="https://www.instagram.com/"> <i class="fa fa-instagram"></i> </a></li>
+<li><a class="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s" href="mailto:mail@gmail.com"> <i class="fa fa-google-plus"></i> </a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="copy-right_text">
+<div class="container">
+<div class="footer_border"></div>
+<div class="row">
+<div class="col-xl-12">
+<p class="copy_right text-center wow fadeInUp" data-wow-duration="1s" data-wow-delay="1.3s">
+
+Copyright &copy;<script>document.write(new Date().getFullYear());</script>,Urban Cold Storage. All rights reserved | Developed by Rohan Khaire, Gaurav Monde.</a>
+
+</p> 
+</div>
+</div>
+</div>
+</div> 
+</div>
+</footer>
+
+
+<script src="{% static 'js/vendor/modernizr-3.5.0.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="js/isotope.pkgd.min.js"></script>
+<script src="{% static 'js/ajax-form.js' %}"></script>
+<script src="{% static 'js/waypoints.min.js' %}"></script>
+<script src="{% static 'js/jquery.counterup.min.js' %}"></script>
+<script src="{% static 'js/imagesloaded.pkgd.min.js' %}"></script>
+<script src="{% static 'js/scrollIt.js' %}"></script>
+<script src="{% static 'js/jquery.scrollUp.min.js' %}"></script>
+<script src="{% static 'js/wow.min.js' %}"></script>
+<script src="{% static 'js/nice-select.min.js' %}"></script>
+<script src="{% static 'js/jquery.slicknav.min.js' %}"></script>
+<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
+<script src="{% static 'js/gijgo.min.js' %"></script>
+
+<script src="{% static 'js/contact.js' %}"></script>
+<script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+<script src="{% static 'js/jquery.form.js' %}"></script>
+<script src="{% static 'js/jquery.validate.min.js' %}"></script>
+<script src="{% static 'js/mail-script.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script async src="{% static 'https://www.googletagmanager.com/gtag/js?id=UA-23581568-13' %}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-23581568-13');
+</script>
+</body>
+
+</html>
